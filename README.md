@@ -23,10 +23,3 @@ dotnet run
 ```
 
 Then open http://localhost:5186/api/tasks, or use `TaskManager.http` to try the endpoints.
-
-## Next
-
-- Project endpoints
-- Auth (JWT)
-- Tests
-- Docker + PostgreSQL
