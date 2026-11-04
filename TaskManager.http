@@ -1,0 +1,9 @@
+@baseUrl = http://localhost:5186
+
+### Create a task
+POST {{baseUrl}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "learn EF Core"
+}
