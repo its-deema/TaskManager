@@ -16,10 +16,10 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<List<TaskResponse>> GetTasks()
+    public async Task<ActionResult<List<TaskResponse>>> GetTasks()
     {
         var tasks = await _taskService.GetTasksAsync();
-        return tasks.Select(TaskResponse.FromEntity).ToList();
+        return Ok(tasks.Select(TaskResponse.FromEntity).ToList());
     }
 
     [HttpGet("{id:int}")]
