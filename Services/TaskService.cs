@@ -20,21 +20,22 @@ public class TaskService : ITaskService
     public async Task<TaskItem?> GetByIdAsync(int id) =>
     await _db.Tasks.FirstOrDefaultAsync(t => t.Id == id);
 
-    public async Task<TaskItem> CreateAsync(string title)
+    public async Task<TaskItem> CreateAsync(string title, int? projectId )
     {
-        var task = new TaskItem { Title = title };
+        var task = new TaskItem { Title = title , ProjectId = projectId};
         _db.Tasks.Add(task);
         await _db.SaveChangesAsync(); // like commit
         return task;
     }
 
-    public async Task<bool> UpdateAsync(int id, string title, bool isCompleted)
+    public async Task<bool> UpdateAsync(int id, string title, bool isCompleted, int? projectId )
     {
         var task = await GetByIdAsync(id);
         if (task is null) return false;
         
         task.Title = title;
         task.IsCompleted = isCompleted;
+        task.ProjectId = projectId;
         await _db.SaveChangesAsync();
         return true;
     }

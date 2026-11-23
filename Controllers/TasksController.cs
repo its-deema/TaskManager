@@ -34,7 +34,7 @@ public class TasksController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TaskResponse>> CreateTask(CreateTaskRequest request)
     {
-        var task = await _taskService.CreateAsync(request.Title);
+        var task = await _taskService.CreateAsync(request.Title, request.ProjectId);
 
         return CreatedAtAction(
         nameof(GetTaskById),     // Action to link to
@@ -46,7 +46,7 @@ public class TasksController : ControllerBase
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateTask(int id, UpdateTaskRequest request)
     {
-        if (!await _taskService.UpdateAsync(id, request.Title, request.IsCompleted))
+        if (!await _taskService.UpdateAsync(id, request.Title, request.IsCompleted, request.ProjectId))
             return NotFound();
 
         return NoContent();
