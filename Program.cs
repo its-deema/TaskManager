@@ -17,7 +17,13 @@ var app = builder.Build();
 
 // ── Phase 2: "How are requests HANDLED?"
 if (app.Environment.IsDevelopment())
+{
     app.MapOpenApi();                             // /openapi/v1.json
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "v1");
+    });
+}
 
 app.MapControllers();                             // routes requests to controllers
 app.Run();
