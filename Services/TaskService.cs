@@ -1,6 +1,8 @@
 using TaskManager.Models;
 using TaskManager.Data;
 using Microsoft.EntityFrameworkCore;
+using TaskManager.Exceptions;
+
 
 namespace TaskManager.Services;
 
@@ -12,6 +14,12 @@ public class TaskService : ITaskService
         _db = db;
     }
 
+    // helper method to throw an exception if project doesn't exist
+    private async Task EnsureProjectExistsAsync(int? projectId){
+        if (projectId is not null && !await _db.Projects.AnyAsync(p => p.Id == projectId))
+            throw new BadRequestException($"Project {projectId} does not exist."); 
+    } 
+
     // method that returns tasks ,
     // the => is a short way to write a method with a single return statement
     public async Task<List<TaskItem>> GetTasksAsync() =>
@@ -22,6 +30,7 @@ public class TaskService : ITaskService
 
     public async Task<TaskItem> CreateAsync(string title, int? projectId )
     {
+        await EnsureProjectExistsAsync(projectId); // check if the projectId exist or throw an exception
         var task = new TaskItem { Title = title , ProjectId = projectId};
         _db.Tasks.Add(task);
         await _db.SaveChangesAsync(); // like commit
@@ -32,6 +41,8 @@ public class TaskService : ITaskService
     {
         var task = await GetByIdAsync(id);
         if (task is null) return false;
+
+        await EnsureProjectExistsAsync(projectId); // check if the projectId exist
         
         task.Title = title;
         task.IsCompleted = isCompleted;
