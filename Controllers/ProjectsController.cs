@@ -42,4 +42,20 @@ public class ProjectsController : ControllerBase
             project
         );
     }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> UpdateProject(int id, UpdateProjectRequest request)
+    {
+        if(!await _projectService.UpdateAsync(id, request.Name))
+            return NotFound();
+        return NoContent();
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeleteProject(int id)
+    {
+        if(!await _projectService.DeleteAsync(id))
+            return NotFound();
+        return NoContent();
+    }
 }

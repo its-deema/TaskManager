@@ -40,4 +40,26 @@ public class ProjectService : IProjectService
         await _db.SaveChangesAsync();
         return ProjectResponse.FromEntity(project); // convert it from project model into projectResponse dto
     }
+
+    public async Task<bool> UpdateAsync(int id, string name)
+    {   
+        //cause GetByIdAsync return a ProjectResponse and we want project entity 
+        var project = await _db.Projects.FirstOrDefaultAsync(p => p.Id == id);   // a tracked Project entity
+        if (project is null) return false;
+
+        project.Name = name;
+        await _db.SaveChangesAsync();
+        return true;
+
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var project =  await _db.Projects.FirstOrDefaultAsync(p=> p.Id == id);
+        if (project is null) return false;
+
+        _db.Projects.Remove(project);
+        await _db.SaveChangesAsync();
+        return true;
+    }
 }

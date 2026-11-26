@@ -12,4 +12,14 @@ public class AppDbContext : DbContext
     //Query it like a list _db.Tasks.FirstOrDefault(...)
 
     public DbSet<Project> Projects => Set<Project>(); //create a table called Projects,
+
+    // configures relationships that conventions don't cover
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<TaskItem>()
+            .HasOne(t => t.Project)          // a task has one project
+            .WithMany(p => p.Tasks)          // a project has many tasks
+            .HasForeignKey(t => t.ProjectId) // linked by ProjectId
+            .OnDelete(DeleteBehavior.Cascade);
+    }
 }

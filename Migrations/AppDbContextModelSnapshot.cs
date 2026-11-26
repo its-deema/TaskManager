@@ -58,7 +58,8 @@ namespace TaskManager.Migrations
                 {
                     b.HasOne("TaskManager.Models.Project", "Project")
                         .WithMany("Tasks")
-                        .HasForeignKey("ProjectId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Project");
                 });
